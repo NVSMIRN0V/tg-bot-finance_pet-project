@@ -14,16 +14,6 @@ async def cmd_start(message: types.Message) -> None:
     await message.answer('Привет! Меня зовут Пятница. Я твой финансовый менеджер. Чем могу помочь?')
 
 
-@dp.message(Command('help'))
-async def cmd_help(message: types.Message) -> None:
-    await message.answer(
-        'Вот чем я могу помочь:\
-        \n1. Добавить новые расходы.\
-        \n2. Удалить последние расходы.\
-        \n3. Показать статистику.'
-    )
-
-
 async def main() -> None:
     await dp.start_polling(bot)
 
