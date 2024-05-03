@@ -39,3 +39,57 @@ def create_table_categories() -> None:
 
     connection.commit()
     connection.close()
+
+
+def create_table_extends() -> None:
+    connection = sql.connect('f.db')
+    cursor = connection.cursor()
+
+    cursor.execute(
+        '''
+            create table if not exists extends (
+                id integer primary key autoincrement,
+                amount text,
+                date text,
+                category text,
+                foreign key (category) references categories(name)
+            );
+        '''
+    )
+
+    connection.commit()
+    connection.close()
+
+
+def insert_into_extends() -> None:
+    connection = sql.connect('f.db')
+    cursor = connection.cursor()
+
+    cursor.execute(
+        '''
+            insert into extends (amount, date, category) 
+            values ('150', '03/05/24', 'transport');
+        '''
+    )
+
+    connection.commit()
+    connection.close()
+
+
+def select_from_extends():
+    connection = sql.connect('f.db')
+    cursor = connection.cursor()
+
+    cursor.execute(
+        '''
+            select * from extends as E
+            join categories as C
+            on E.category=C.name
+        '''
+    )
+
+    result = cursor.fetchall()
+    for row in result: 
+        print(row) 
+
+    connection.close()
