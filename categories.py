@@ -1,6 +1,4 @@
 '''Файл для работы с категориями расходов'''
-
-
 from dataclasses import dataclass
 
 
