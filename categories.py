@@ -1,4 +1,5 @@
 '''Файл для работы с категориями расходов'''
+import sql
 from dataclasses import dataclass
 
 
@@ -16,8 +17,23 @@ class Categories:
 
     def _load_categories(self) -> list[Category]:
         '''Загрузить все категории из бд'''
-        pass
+        dbrequest = sql.fetchall('categories', ['name', 'altname', 'aliases'])
+        categories = []
+        for data in dbrequest:
+            category = Category(name=data['name'], altname=data['altname'], aliases=data['aliases'].split(', '))
+            categories.append(category)
+        return categories
 
-    def get_category(self) -> Category:
-        '''Получить категорию по ее имени или алиасу'''
-        pass
+    def get_all_categories(self) -> list[Category]:
+        '''Получить список всех категорий'''
+        return self._categories 
+
+    def get_category(self, alias: str) -> Category:
+        '''Получить категорию по алиасу'''
+        other, finded = None, None
+        for category in self._categories:
+            if alias in category.aliases:
+                finded = category; break 
+            elif category.name == 'other':
+                other = category
+        return finded if finded else other

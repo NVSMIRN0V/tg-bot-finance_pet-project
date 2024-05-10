@@ -1,4 +1,5 @@
 '''Файл для работы с расходами'''
+from categories import Categories, Category
 import sql
 from datetime import datetime
 from dataclasses import dataclass
@@ -25,7 +26,8 @@ def add(message: str) -> Expense:
     '''Функция добавления нового расхода'''
     parsed_message = parse(message)
     date = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-    expense = Expense(index=None, amount=parsed_message.amount, date=date, category=parsed_message.category)
+    category = Categories().get_category(parsed_message.category)
+    expense = Expense(index=None, amount=parsed_message.amount, date=date, category=category.altname)
     sql.insert('expense', {'amount': expense.amount, 'date': expense.date, 'category': expense.category,}) # !
     return expense 
 
