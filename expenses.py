@@ -40,20 +40,33 @@ def parse(message: str) -> Message:
     return Message(amount=message[0], category=message[1], description=None)
 
 
-def get_statistics_today() -> dict:
+def get_statistics_today() -> str:
     '''Функция получения статистики расходов за сегодня'''
     # Запрос в бд
-    cursor = sql.get_cursor()
-    cursor.execute(f'select amount from expense where date(date)=date("now")')
-    expenses = cursor.fetchall()
-    print(expenses)
+    expenses = sql.fetchall('expense', ['amount'], 'where date(date)=date("now")')
+
     # Формирование ответа
     if not expenses:
         answer = 'Расходов за сегодня нет.'
     else:
         result = 0
         for exp in expenses:
-            amount = float(exp[0])
-            result += amount
+            result += float(exp['amount'])
         answer = f'За сегодня Вы потратили {result}р.'    
+    return answer
+
+
+def get_list_expenses_today() -> str:
+    '''Функция получения расходов за сегодня списком.'''
+    # Запрос в бд
+    expenses = sql.fetchall('expense', ['amount', 'category'], 'where date(date)=date("now")')
+    print(expenses)
+    # Формирование ответа
+    if not expenses:
+        answer = 'Расходов за сегодня нет.'
+    else:
+        answer = ''
+        for ind, exp in zip(range(1, len(expenses) + 1), expenses):
+            amount, category = exp.values()
+            answer += str(ind) + '. ' + amount + ' ' + category + '.\n'
     return answer

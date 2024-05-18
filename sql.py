@@ -21,13 +21,13 @@ def insert(table: str, data: dict) -> None:
     connection.commit()
 
 
-def fetchall(table: str, cols: list[str]) -> list[dict]:
+def fetchall(table: str, cols: list[str], conditions: str = None) -> list[dict]:
     '''Получение результата запроса в бд'''
 
     # Чтение записей из бд
     cols_joined = ', '.join(cols)
     cursor.execute(
-        f'select {cols_joined} from {table}'
+        f'select {cols_joined} from {table} {conditions}'
     )
     objects = cursor.fetchall()
 

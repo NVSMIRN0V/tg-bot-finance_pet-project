@@ -16,9 +16,15 @@ async def cmd_start(message: types.Message) -> None:
     await message.answer('Привет! Меня зовут Пятница. Я твой финансовый менеджер. Чем могу помочь?')
 
 
-@dp.message(Command('today'))
+@dp.message(Command('statstoday'))
 async def send_statistics_today(message: types.Message) -> None:
     answer = expenses.get_statistics_today()
+    await message.answer(answer)
+
+
+@dp.message(Command('listtoday'))
+async def send_statistics_today(message: types.Message) -> None:
+    answer = expenses.get_list_expenses_today()
     await message.answer(answer)
 
 
