@@ -1,4 +1,5 @@
 import asyncio
+from multiprocessing.connection import answer_challenge
 import expenses
 
 from config import TG_API_TOKEN
@@ -13,6 +14,12 @@ dp = Dispatcher()
 @dp.message(Command('start'))
 async def cmd_start(message: types.Message) -> None:
     await message.answer('Привет! Меня зовут Пятница. Я твой финансовый менеджер. Чем могу помочь?')
+
+
+@dp.message(Command('today'))
+async def send_statistics_today(message: types.Message) -> None:
+    answer = expenses.get_statistics_today()
+    await message.answer(answer)
 
 
 @dp.message()

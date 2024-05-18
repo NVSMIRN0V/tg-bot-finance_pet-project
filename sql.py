@@ -39,3 +39,8 @@ def fetchall(table: str, cols: list[str]) -> list[dict]:
             dict_obj[col] = obj[index] 
         unpacked_objects.append(dict_obj)        
     return unpacked_objects
+
+
+def get_cursor() -> sql.Cursor:
+    '''Получение курсора'''
+    return cursor
