@@ -1,7 +1,6 @@
 '''Файл для работы с расходами'''
-from unittest import result
-from categories import Categories, Category
 import sql
+from categories import Categories, Category
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -29,7 +28,7 @@ def add(message: str) -> Expense:
     date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     category = Categories().get_category(parsed_message.category)
     expense = Expense(index=None, amount=parsed_message.amount, date=date, category=category.altname)
-    sql.insert('expense', {'amount': expense.amount, 'date': expense.date, 'category': expense.category,}) # !
+    sql.insert('expenses', {'amount': expense.amount, 'date': expense.date, 'category': expense.category,}) # !
     return expense 
 
 
@@ -43,7 +42,7 @@ def parse(message: str) -> Message:
 def get_statistics_today() -> str:
     '''Функция получения статистики расходов за сегодня'''
     # Запрос в бд
-    expenses = sql.fetchall('expense', ['amount'], 'where date(date)=date("now")')
+    expenses = sql.fetchall('expenses', ['amount'], 'where date(date)=date("now")')
 
     # Формирование ответа
     if not expenses:
@@ -59,8 +58,8 @@ def get_statistics_today() -> str:
 def get_list_expenses_today() -> str:
     '''Функция получения расходов за сегодня списком.'''
     # Запрос в бд
-    expenses = sql.fetchall('expense', ['amount', 'category'], 'where date(date)=date("now")')
-    print(expenses)
+    expenses = sql.fetchall('expenses', ['amount', 'category'], 'where date(date)=date("now")')
+
     # Формирование ответа
     if not expenses:
         answer = 'Расходов за сегодня нет.'
